@@ -8,6 +8,8 @@ describe "Tasks" do
     it "display some tasks" do
       visit tasks_path
       page.should have_content 'go to bed'
+
+      save_and_open_page
     end
 
     it "creates a new task" do
@@ -54,6 +56,19 @@ describe "Tasks" do
       click_button 'Update Task'
       current_path.should == edit_task_path(@task)
       page.should have_content 'There was an error updating your task.'
+
+      save_and_open_page
+    end
+  end
+
+  describe "DELETE /tasks" do
+    it "should delete a task" do
+      visit tasks_path
+      find("#task_#{@task.id}").click_link 'Delete'
+      page.should have_content 'Task has been deleted.'
+      page.should have_no_content 'go to bed'
+
+      save_and_open_page
     end
   end
 end
