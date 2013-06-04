@@ -8,11 +8,52 @@ describe "Tasks" do
     it "display some tasks" do
       visit tasks_path
       page.should have_content 'go to bed'
+    end
+
+    it "creates a new task" do
+      visit tasks_path
+      fill_in 'Task', :with => 'go to work'
+      click_button 'Create Task'
+
+      current_path.should == tasks_path
+      page.should have_content 'go to work'
+
+      save_and_open_page
+    end
 
 #    it "works! (now write some real specs)" do
 #      # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
-#      get tasks_index_path
+#      get tasks_path
 #      response.status.should be(200)
+#    end
+  end
+  describe "PUT /tasks" do
+    it "edits a task" do
+      visit tasks_path
+      click_link 'Edit'
+    
+      current_path.should == edit_task_path(@task)
+   
+      # page.should have_content 'go to bed'
+      find_field('Task').value.should == 'go to bed' 
+
+      fill_in 'Task', :with => 'updated task'
+      click_button 'Update Task'
+
+      current_path.should == tasks_path
+ 
+      page.should have_content 'updated task' 
+ 
+      save_and_open_page 
+    end
+
+    it "should not update an empty task" do
+      visit tasks_path
+      click_link 'Edit'
+      fill_in 'Task', :with => ''
+      click_button 'Update Task'
+      current_path.should == edit_task_path(@task)
+      page.should have_content 'There was an error updating your task.'
     end
   end
 end

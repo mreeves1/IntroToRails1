@@ -1,6 +1,10 @@
 <h1>Tasks</h1>
+<%= render 'form' %>
 <ul>
-    <% for task in @tasks %>
-        <li><%= task.task %></li>
-    <% end %>
+	<% for task in @tasks %>
+		<li>
+			<%= task.task %>
+			| <%= link_to 'Edit', edit_task_path(task) %>
+		</li>
+	<% end %>
 </ul>
